@@ -3,11 +3,13 @@ package com.felipe.compasso.MSCustomer.services;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.felipe.compasso.MSCustomer.DTO.AddressDtoInsertion;
+import com.felipe.compasso.MSCustomer.DTO.AddressDtoWithCustomerId;
 import com.felipe.compasso.MSCustomer.DTO.AddressDtoRecovery;
 import com.felipe.compasso.MSCustomer.entities.Address;
 import com.felipe.compasso.MSCustomer.entities.BrazilianStates;
@@ -24,7 +26,7 @@ public class AddressService {
 	@Autowired
 	private CustomerRepository customerRep;
 	
-	public AddressDtoRecovery addAddress(AddressDtoInsertion addressDtoIns) {
+	public AddressDtoRecovery addAddress(AddressDtoWithCustomerId addressDtoIns) {
 		
 		Customer customerBd = customerRep.findById(addressDtoIns.getCustomerId()).get();
 		
@@ -37,6 +39,27 @@ public class AddressService {
 		
 		return addressDtoRec;
 		
+	}
+	
+	public AddressDtoRecovery editAddress(Long id, @Valid AddressDtoWithCustomerId addressDtoIns) {
+
+		Address addressBd = addressRep.findById(id).get();
+		Customer customerBd = customerRep.findById(addressDtoIns.getCustomerId()).get();
+		
+		addressBd.setState(getStateLikeEnum(addressDtoIns.getState()));
+		addressBd.setCity(addressDtoIns.getCity());
+		addressBd.setDistrict(addressDtoIns.getDistrict());
+		addressBd.setStreet(addressDtoIns.getStreet());
+		addressBd.setNumber(addressDtoIns.getNumber());
+		addressBd.setCep(addressDtoIns.getCep());
+		addressBd.setComplement(addressDtoIns.getComplement());
+		addressBd.setCustomer(customerBd);
+		
+		addressRep.save(addressBd);
+		
+		AddressDtoRecovery addressDtoRec = new ModelMapper().map(addressBd, AddressDtoRecovery.class);
+		
+		return addressDtoRec;
 	}
 	
 	private BrazilianStates getStateLikeEnum(String name) {
@@ -75,6 +98,10 @@ public class AddressService {
 		
 		return BrazilianStates.valueOf(stateFound);
 		
+	}
+
+	public void deleteAddress(Long id) {
+		addressRep.deleteById(id);
 	}
 	
 }

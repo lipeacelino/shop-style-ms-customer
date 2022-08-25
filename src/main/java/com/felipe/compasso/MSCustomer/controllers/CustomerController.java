@@ -15,8 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.felipe.compasso.MSCustomer.DTO.CustomerDtoRecovery;
 import com.felipe.compasso.MSCustomer.DTO.CustomerDtoInsertion;
+import com.felipe.compasso.MSCustomer.DTO.CustomerDtoRecovery;
+import com.felipe.compasso.MSCustomer.DTO.CustomerDtoWithAddress;
 import com.felipe.compasso.MSCustomer.services.CustomerService;
 
 @RestController
@@ -52,7 +53,7 @@ public class CustomerController {
 	
 	@GetMapping("/customers/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	public CustomerDtoRecovery findCustomerById(@PathVariable Long id) {
+	public CustomerDtoWithAddress findCustomerById(@PathVariable Long id) {
 		return customerServ.findCustomerById(id);
 	}
 

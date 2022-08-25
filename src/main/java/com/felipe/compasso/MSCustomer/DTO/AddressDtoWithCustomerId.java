@@ -16,7 +16,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AddressDtoInsertion {
+public class AddressDtoWithCustomerId {
 
 	@NotNull
 	private String state;

@@ -4,17 +4,23 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.felipe.compasso.MSCustomer.DTO.AddressDtoWithCustomerId;
 import com.felipe.compasso.MSCustomer.DTO.CustomerDtoInsertion;
 import com.felipe.compasso.MSCustomer.DTO.CustomerDtoRecovery;
+import com.felipe.compasso.MSCustomer.DTO.CustomerDtoWithAddress;
+import com.felipe.compasso.MSCustomer.entities.Address;
 import com.felipe.compasso.MSCustomer.entities.Customer;
 import com.felipe.compasso.MSCustomer.entities.Sex;
+import com.felipe.compasso.MSCustomer.repositories.AddressRepository;
 import com.felipe.compasso.MSCustomer.repositories.CustomerRepository;
 
 @Service
@@ -22,6 +28,9 @@ public class CustomerService {
 
 	@Autowired
 	private CustomerRepository customerRep;
+	
+	@Autowired
+	private AddressRepository addressRep;
 	
 	@Autowired
 	private PasswordEncoder passEncoder;
@@ -44,11 +53,26 @@ public class CustomerService {
 		
 	}
 	
-	public CustomerDtoRecovery findCustomerById(Long id) {
+	public CustomerDtoWithAddress findCustomerById(Long id) {
 		
 		Customer customerBd = customerRep.findById(id).get();
+		List<Address> adressList = addressRep.findAllAddresOfCustomer(customerBd.getId());
 		
-		CustomerDtoRecovery customerRec = new ModelMapper().map(customerBd, CustomerDtoRecovery.class);
+		
+		List<AddressDtoWithCustomerId> listAdressDtoWithCustomerId = adressList.stream()
+				.map(a -> 
+				
+				{
+					AddressDtoWithCustomerId addressWithCustomerId = new ModelMapper().map(a, AddressDtoWithCustomerId.class);
+					addressWithCustomerId.setCustomerId(customerBd.getId());
+					return addressWithCustomerId;
+				}
+
+				).collect(Collectors.toList());
+																			
+			
+		CustomerDtoWithAddress customerRec = new ModelMapper().map(customerBd, CustomerDtoWithAddress.class);
+		customerRec.setAddress(listAdressDtoWithCustomerId);
 		
 		return customerRec;
 		
