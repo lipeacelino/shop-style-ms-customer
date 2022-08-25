@@ -1,6 +1,8 @@
 package com.felipe.compasso.MSCustomer.DTO;
 
-import com.felipe.compasso.MSCustomer.entities.Sex;
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,14 +15,15 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CustomerDTO {
-	
+public class CustomerDtoRecovery {
+
 	private Long id;
 	private String cpf;
 	private String firstName;
 	private String lastName;
-	private Sex sex;
-	private String birthdate;
+	private String sex;
+	@JsonFormat(pattern = "yyyy-MM-dd")
+	private Date birthdate;
 	private String email;
 	private String password;
 	private boolean active;

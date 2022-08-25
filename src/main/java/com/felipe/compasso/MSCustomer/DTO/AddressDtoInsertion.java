@@ -1,13 +1,9 @@
-package com.felipe.compasso.MSCustomer.entities;
+package com.felipe.compasso.MSCustomer.DTO;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonAlias;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,21 +11,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity(name="address")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Address {
-	
-	@Id
-	@GeneratedValue
-	private Long id;
-	
+public class AddressDtoInsertion {
+
 	@NotNull
-	@Enumerated(EnumType.STRING)
-	private BrazilianStates state;
+	private String state;
 	
 	@NotEmpty
 	private String city;
@@ -48,7 +38,7 @@ public class Address {
 	
 	private String complement;
 	
-	@OneToOne
-	private Customer customer;
-
+	@JsonAlias("customer_id")
+	private Long customerId;
+	
 }

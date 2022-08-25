@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.felipe.compasso.MSCustomer.DTO.CustomerDTO;
-import com.felipe.compasso.MSCustomer.entities.Customer;
+import com.felipe.compasso.MSCustomer.DTO.CustomerDtoRecovery;
+import com.felipe.compasso.MSCustomer.DTO.CustomerDtoInsertion;
 import com.felipe.compasso.MSCustomer.services.CustomerService;
 
 @RestController
@@ -34,25 +34,25 @@ public class CustomerController {
 	
 	@PostMapping("/customers")
 	@ResponseStatus(HttpStatus.CREATED)
-	public CustomerDTO addCustomer(@Valid @RequestBody Customer customer) {
-		return customerServ.addCustomer(customer);
+	public CustomerDtoRecovery addCustomer(@Valid @RequestBody CustomerDtoInsertion customerDtoPost) {
+		return customerServ.addCustomer(customerDtoPost);
 	}
 	
 	@PutMapping("/customers/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	public CustomerDTO updateCustomer(@Valid @PathVariable Long id,  @RequestBody Customer customer) {
-		return customerServ.setCustomer(id, customer);
+	public CustomerDtoRecovery updateCustomer(@Valid @PathVariable Long id,  @RequestBody CustomerDtoInsertion customerDto) {
+		return customerServ.setCustomer(id, customerDto);
 	}
 	
 	@PutMapping("/customers/{id}/password")
 	@ResponseStatus(HttpStatus.OK)
-	public CustomerDTO updateCustomerPassword(@Valid @PathVariable Long id,  @RequestBody Map<String, String> password) {
+	public CustomerDtoRecovery updateCustomerPassword(@Valid @PathVariable Long id,  @RequestBody Map<String, String> password) {
 		return customerServ.updateCustomerPassword(id, password);
 	}
 	
 	@GetMapping("/customers/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	public CustomerDTO findCustomerById(@PathVariable Long id) {
+	public CustomerDtoRecovery findCustomerById(@PathVariable Long id) {
 		return customerServ.findCustomerById(id);
 	}
 
